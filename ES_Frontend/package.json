@@ -1,0 +1,16 @@
+{
+  "name": "es_frontend",
+  "version": "1.0.0",
+  "description": "Frontend for spring rest app",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "dependencies": {
+    "express": "^4.17.1",
+    "html": "^1.0.0",
+    "path": "^0.12.7",
+    "request": "^2.88.0"
+  }
+}

@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html>
+<meta charset="UTF-8">
+
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+    body 
+	{
+        font-family: Arial, Helvetica, sans-serif;
+        margin: 0;
+        padding: 0;
+        background-size: cover;
+		background-color:lavender;
+    }
+
+    .inputBox 
+	{
+        position: relative;
+    }
+
+    h1 
+	{
+        padding: 0;
+        color: #fff;
+        text-align: left;
+        color: #202124;
+        font-size: 24px;
+        font-weight: 400;
+        padding-bottom: 30px;
+        margin-left: 30px;
+    }
+
+    .inputBox input 
+	{
+        width: 40%;
+        padding: 0.625rem 10px;
+        font-size: 1rem;
+        letter-spacing: 0.062rem;
+        margin-bottom: 1.875rem;
+        border: 1px solid #dadce0;
+        background-color: white;
+        border-radius: 4px;
+        margin-left: 30px;
+	
+    }
+
+    .inputBox label 
+	{
+        position: absolute;
+        top: 0;
+        left: 10px;
+        padding: 0.625rem 0;
+        font-size: 1rem;
+        color: grey;
+        pointer-events: none;
+        transition: 0.3s;
+        margin-left: 30px;
+    }
+
+    .inputBox input:focus~label,
+    .inputBox input:valid~label,
+    .inputBox input:not([value=""])~label 
+	{
+        top: -1.125rem;
+        left: 10px;
+        color: #1a73e8;
+        font-size: 0.75rem;
+        background-color: white;
+        height: 10px;
+        padding-left: 5px;
+        padding-right: 5px;
+    }
+
+    p 
+	{
+        margin-left: 65px;
+		font-size: 125%;
+    }
+
+    .btn 
+	{
+        background-color: #008CBA;
+        border: none;
+        color: white;
+        padding: 15px 32px;
+        text-align: center;
+        text-decoration: none;
+        display: inline-block;
+        font-size: 16px;
+        margin: 4px 2px;
+        cursor: pointer;
+        margin-left: 30px;
+    }
+	
+	.topnav 
+	{
+		margin-left: 30px;
+		margin-right: 30px;
+		overflow: hidden;
+		background-color: slategray;
+	}
+
+    .topnav a 
+	{
+		float: left;
+		color: #f2f2f2;
+		text-align: center;
+		padding: 14px 16px;
+		text-decoration: none;
+		font-size: 17px;
+	}
+
+   .topnav a:hover 
+    {
+		background-color: rgb(80, 80, 80);
+		color: rgb(255, 255, 255);
+    }
+	
+	h1
+	{
+		margin-left: 50px;
+	}
+	
+	form
+	{
+		margin-left: 35px;
+	}
+	
+	
+</style>
+
+<head>
+    <title>Υποβολή Αίτησης</title>
+</head>
+
+<body>
+	<div class="logo">
+		<img src="../images/logo.png">
+	</div>
+    <div class="topnav">
+	    <a href="/home">Αρχική Σελίδα</a>
+        <a href="/showform">Εμφάνιση Αίτησης</a>
+        <a href="/">Αποσύνδεση</a>
+     </div>
+     <div>
+       <h2 id="header"></h2>
+     </div>	
+	</br>	 
+	<h1>Δημιουργεία νέας αίτησης</h1>
+    <p>Εισάγετε τα παρακάτω στοιχεία:</p>
+	</br>
+    <form method="POST" action="/submitForm">
+        <div class="inputBox">
+            <input type="number" name="personal_income" required onkeyup="this.setAttribute('value', this.value);"
+                value="">
+            <label>Προσωπικό Εισόδημα</label>
+        </div>
+        <div class="inputBox">
+            <input type="number" name="family_income" required onkeyup="this.setAttribute('value', this.value);"
+                value="">
+            <label>Οικογενειακό Εισόδημα</label>
+        </div>
+        <div class="inputBox">
+            <input type="number" name="siblings_studying" required onkeyup="this.setAttribute('value', this.value);"
+                value="">
+            <label>Αδέρφια Φοιτητές</label>
+        </div>
+        <div class="inputBox">
+            <input type="text" name="home_city" required onkeyup="this.setAttribute('value', this.value);"
+                value="">
+            <label>Πόλη</label>
+        </div>
+        <div class="inputBox">
+            <input type="number" name="year_studying" required onkeyup="this.setAttribute('value', this.value);"
+                value="">
+            <label>Έτος Φοίτησης</label>
+        </div>
+        <div class="inputBox">
+            <input type="number" name="year_staying" required onkeyup="this.setAttribute('value', this.value);"
+                value="">
+            <label>Έτος Στέγασης</label>
+        </div>
+        <div class="inputBox">
+            <input type="number" name="unemployed_parents" required onkeyup="this.setAttribute('value', this.value);"
+                value="">
+            <label>Άνεργοι Γονείς</label>
+        </div>
+        <input class="btn" type="submit" value="Υποβολή"/>
+    </form>
+
+    <script>
+        const urlParams = new URLSearchParams(window.location.search);
+        const cantApply = urlParams.get('user');
+        const formSubmited = urlParams.get('form');
+        const formFailed = urlParams.get('form');
+        if(cantApply == "no_right_to_apply") 
+		{
+            alert("Form submission attempt failed! User has no submission rights. Please ask an admin to provide rights to your account");
+        } 
+		else if(formSubmited == "submited") 
+		{
+            alert("Form submission sucessfull!");
+        } 
+		else if(formSubmited == "not_submited") 
+		{
+            alert("Form submission failed!");
+        }
+    </script>
+</body>
+
+</html>

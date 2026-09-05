@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Εμφάνιση Φόρμας</title>
+</head>
+
+<style>
+  body
+  {
+    background-color: lavender;
+    margin: 0;
+    font-family: Arial, Helvetica, sans-serif;
+  }
+
+  .topnav
+  {
+    margin-left: 30px;
+    margin-right: 30px;
+    overflow: hidden;
+    background-color: slategray;
+  }
+
+  .topnav a
+  {
+    float: left;
+    color: #f2f2f2;
+    text-align: center;
+    padding: 14px 16px;
+    text-decoration: none;
+    font-size: 17px;
+  }
+
+  .topnav a:hover
+  {
+    background-color: rgb(80, 80, 80);
+    color: rgb(255, 255, 255);
+  }
+
+  button
+  {
+    background-color: #008CBA;
+    border: none;
+    color: white;
+    padding: 15px 32px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 4px 2px 20px 100px;
+    cursor: pointer;
+  }
+
+  .result-box
+  {
+    display: none;
+    margin: 10px 100px 40px 100px;
+    padding: 20px;
+    max-width: 700px;
+    background-color: white;
+    border: 1px solid #c8c8c8;
+    border-radius: 4px;
+  }
+
+  .result-box h2
+  {
+    margin-top: 0;
+  }
+
+  .result-table
+  {
+    width: 100%;
+    border-collapse: collapse;
+  }
+
+  .result-table td
+  {
+    padding: 8px;
+    border-bottom: 1px solid #e0e0e0;
+  }
+
+  .result-table td:first-child
+  {
+    font-weight: bold;
+    width: 45%;
+  }
+
+  .error
+  {
+    color: #a00000;
+  }
+</style>
+
+<body>
+  <div class="logo">
+    <img src="../images/logo.png" alt="Logo">
+  </div>
+
+  <div class="topnav">
+    <a href="/home">Αρχική Σελίδα</a>
+  </div>
+
+  <br><br>
+
+  <button id="showFormButton" type="button">Αναζήτηση</button>
+
+  <div id="formResult" class="result-box"></div>
+
+  <script>
+    document.getElementById("showFormButton").addEventListener("click", async function () {
+      const result = document.getElementById("formResult");
+      result.style.display = "block";
+      result.innerHTML = "<p>Φόρτωση...</p>";
+
+      try {
+        const response = await fetch("/showForm", {
+          method: "POST"
+        });
+
+        if (!response.ok) {
+          throw new Error("HTTP " + response.status);
+        }
+
+        const form = await response.json();
+
+        if (form.form === "NOT_FOUND") {
+          result.innerHTML = "<p>Δεν βρέθηκε υποβληθείσα αίτηση για τον συγκεκριμένο χρήστη.</p>";
+          return;
+        }
+
+        result.innerHTML = `
+          <h2>Στοιχεία Αίτησης</h2>
+          <table class="result-table">
+            <tr><td>Χρήστης</td><td>${form.username}</td></tr>
+            <tr><td>Προσωπικό Εισόδημα</td><td>${form.personalIncome}</td></tr>
+            <tr><td>Οικογενειακό Εισόδημα</td><td>${form.familyIncome}</td></tr>
+            <tr><td>Αδέρφια Φοιτητές</td><td>${form.siblingsStudying}</td></tr>
+            <tr><td>Πόλη</td><td>${form.homeCity}</td></tr>
+            <tr><td>Έτος Φοίτησης</td><td>${form.yearStudying}</td></tr>
+            <tr><td>Έτος Στέγασης</td><td>${form.yearStaying}</td></tr>
+            <tr><td>Άνεργοι Γονείς</td><td>${form.unemployedParents}</td></tr>
+            <tr><td>Μόρια</td><td>${form.points}</td></tr>
+            <tr><td>Κατάσταση</td><td>${form.status}</td></tr>
+          </table>
+        `;
+      } catch (error) {
+        console.error(error);
+        result.innerHTML = '<p class="error">Αποτυχία ανάκτησης της αίτησης. Ελέγξτε ότι το backend είναι διαθέσιμο.</p>';
+      }
+    });
+  </script>
+</body>
+
+</html>

@@ -1,0 +1,68 @@
+</div>
+
+<p></p>
+
+<hr />
+<!-- flexbox grid example -->
+<div class="container">
+	<div class="columns">
+		<div class="column col-12">
+			<sec:authorize access="isAuthenticated()">
+				<div class="ui segment">
+					User:
+					<sec:authentication property="principal.username" />
+					, Role:
+					<sec:authentication property="principal.authorities" />
+				</div>
+
+
+
+			</sec:authorize>
+		</div>
+	</div>
+</div>
+
+<script type="text/javascript">
+	$("[name='logout-nav']").click(function() {
+		var urlCall = "<c:url value="/logout"></c:url>";
+		var token = $("meta[name='_csrf']").attr("content");
+		var header = $("meta[name='_csrf_header']").attr("content");
+		$.ajax({
+			url : urlCall,
+			type : 'POST',
+			beforeSend : function(xhr) {
+				xhr.setRequestHeader(header, token);
+			},
+			success : function(result) {
+				console.log(result);
+				$(location).attr("href", "<c:url value="/login"></c:url>");
+			},
+			error : function(result) {
+				console.log(result);
+			},
+		});
+	});
+	$("[name='home-nav']").click(function() {
+		var urlCall = "<c:url value="/logged"></c:url>";
+		var token = $("meta[name='_csrf']").attr("content");
+		var header = $("meta[name='_csrf_header']").attr("content");
+		$.ajax({
+			url : urlCall,
+			type : 'GET',
+			beforeSend : function(xhr) {
+				xhr.setRequestHeader(header, token);
+			},
+			success : function(result) {
+				console.log(result);
+				$(location).attr("href", "<c:url value="/logged"></c:url>");
+			},
+			error : function(result) {
+				console.log(result);
+			},
+		});
+	});
+</script>
+
+
+</body>
+</html>

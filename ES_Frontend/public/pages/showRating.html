@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Εμφάνιση Προσωπικής Κατάταξης</title>
+</head>
+
+<style>
+  body
+  {
+    background-color: lavender;
+    margin: 0;
+    font-family: Arial, Helvetica, sans-serif;
+  }
+
+  .topnav
+  {
+    margin-left: 30px;
+    margin-right: 30px;
+    overflow: hidden;
+    background-color: slategray;
+  }
+
+  .topnav a
+  {
+    float: left;
+    color: #f2f2f2;
+    text-align: center;
+    padding: 14px 16px;
+    text-decoration: none;
+    font-size: 17px;
+  }
+
+  .topnav a:hover
+  {
+    background-color: rgb(80, 80, 80);
+    color: rgb(255, 255, 255);
+  }
+
+  button
+  {
+    background-color: #008CBA;
+    border: none;
+    color: white;
+    padding: 15px 32px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 4px 2px 20px 100px;
+    cursor: pointer;
+  }
+
+  .result-box
+  {
+    display: none;
+    margin: 10px 100px 40px 100px;
+    padding: 20px;
+    max-width: 600px;
+    background-color: white;
+    border: 1px solid #c8c8c8;
+    border-radius: 4px;
+  }
+
+  .result-box h2
+  {
+    margin-top: 0;
+  }
+
+  .result-table
+  {
+    width: 100%;
+    border-collapse: collapse;
+  }
+
+  .result-table td
+  {
+    padding: 8px;
+    border-bottom: 1px solid #e0e0e0;
+  }
+
+  .result-table td:first-child
+  {
+    font-weight: bold;
+    width: 40%;
+  }
+
+  .error
+  {
+    color: #a00000;
+  }
+</style>
+
+<body>
+  <div class="logo">
+    <img src="../images/logo.png" alt="Logo">
+  </div>
+
+  <div class="topnav">
+    <a href="/home">Αρχική Σελίδα</a>
+  </div>
+
+  <br><br>
+
+  <button id="showRatingButton" type="button">Αναζήτηση</button>
+
+  <div id="ratingResult" class="result-box"></div>
+
+  <script>
+    document.getElementById("showRatingButton").addEventListener("click", async function () {
+      const result = document.getElementById("ratingResult");
+      result.style.display = "block";
+      result.innerHTML = "<p>Φόρτωση...</p>";
+
+      try {
+        const response = await fetch("/showRating", {
+          method: "POST"
+        });
+
+        if (!response.ok) {
+          throw new Error("HTTP " + response.status);
+        }
+
+        const rating = await response.json();
+
+        if (rating.formRating === "NOT_FOUND") {
+          result.innerHTML = "<p>Δεν βρέθηκε προσωπική κατάταξη για τον συγκεκριμένο χρήστη.</p>";
+          return;
+        }
+
+        result.innerHTML = `
+          <h2>Προσωπική Κατάταξη</h2>
+          <table class="result-table">
+            <tr><td>Χρήστης</td><td>${rating.username}</td></tr>
+            <tr><td>Θέση</td><td>${rating.position}</td></tr>
+            <tr><td>Κατάσταση</td><td>${rating.status}</td></tr>
+          </table>
+        `;
+      } catch (error) {
+        console.error(error);
+        result.innerHTML = '<p class="error">Αποτυχία ανάκτησης της κατάταξης. Ελέγξτε ότι το backend είναι διαθέσιμο.</p>';
+      }
+    });
+  </script>
+</body>
+
+</html>
